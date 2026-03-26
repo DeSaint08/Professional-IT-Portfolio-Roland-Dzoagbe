@@ -3,986 +3,595 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roland Dzoagbe — IT Infrastructure & Cyber Operations</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>rdzoagbe@infra:~$ — Roland Dzoagbe</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg-primary: #0A0E17;
-  --bg-secondary: #111827;
-  --bg-card: #161E2E;
-  --bg-card-hover: #1C2640;
-  --accent: #3B82F6;
-  --accent-glow: rgba(59, 130, 246, 0.15);
-  --accent-bright: #60A5FA;
-  --text-primary: #F1F5F9;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --border: #1E293B;
-  --border-accent: #2563EB;
-  --gradient-start: #1E3A5F;
-  --gradient-end: #0F172A;
-  --success: #10B981;
-  --serif: 'DM Serif Display', Georgia, serif;
-  --sans: 'Outfit', sans-serif;
-  --mono: 'JetBrains Mono', monospace;
+:root{
+  --bg:#0a0a0a;
+  --bg-panel:#0d0d0d;
+  --bg-card:#111111;
+  --bg-card-hover:#151515;
+  --green:#00ff88;
+  --green-dim:#00cc6a;
+  --green-glow:rgba(0,255,136,0.08);
+  --green-glow-strong:rgba(0,255,136,0.15);
+  --cyan:#00e5ff;
+  --amber:#ffb800;
+  --red:#ff3355;
+  --text:#d4d4d4;
+  --text-dim:#777;
+  --text-muted:#444;
+  --border:#1a1a1a;
+  --border-green:rgba(0,255,136,0.12);
+  --mono:'IBM Plex Mono',monospace;
+  --display:'Syne',sans-serif;
+  --mono-alt:'Space Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--mono);background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;position:relative}
+
+/* CRT Scanlines */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);
+}
+/* Screen flicker */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.35) 100%);
 }
 
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+::selection{background:var(--green);color:var(--bg)}
 
-html { scroll-behavior: smooth; }
+a{color:var(--green);text-decoration:none;transition:all .3s}
+a:hover{color:var(--cyan);text-shadow:0 0 8px rgba(0,229,255,0.4)}
 
-body {
-  font-family: var(--sans);
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  line-height: 1.7;
-  overflow-x: hidden;
+/* ─── NAV / TOOLBAR ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:48px;display:flex;align-items:center;
+  background:var(--bg-panel);
+  border-bottom:1px solid var(--border-green);
+  padding:0 1.5rem;gap:0;
+  font-size:.75rem;
 }
+.nav-dots{display:flex;gap:6px;margin-right:1.5rem;flex-shrink:0}
+.nav-dots span{width:10px;height:10px;border-radius:50%;display:block}
+.nav-dots .d-red{background:#ff5f57}
+.nav-dots .d-yellow{background:#ffbd2e}
+.nav-dots .d-green{background:#28c840}
 
-/* Noise overlay */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-}
+.nav-title{color:var(--text-dim);font-size:.72rem;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-title span{color:var(--green)}
 
-::selection { background: var(--accent); color: white; }
+.nav-tabs{display:flex;gap:0;height:100%;align-items:stretch}
+.nav-tab{
+  display:flex;align-items:center;padding:0 1rem;
+  color:var(--text-dim);font-size:.72rem;font-family:var(--mono);font-weight:500;
+  background:transparent;border:none;cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all .25s;position:relative;letter-spacing:.5px;
+  white-space:nowrap;
+}
+.nav-tab:hover{color:var(--text);background:rgba(255,255,255,0.02)}
+.nav-tab.active{color:var(--green);border-bottom-color:var(--green);background:rgba(0,255,136,0.03)}
+.nav-tab .tab-dot{width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:6px;opacity:0;transition:opacity .3s}
+.nav-tab.active .tab-dot{opacity:1}
 
-a { color: var(--accent-bright); text-decoration: none; transition: color 0.3s; }
-a:hover { color: white; }
+/* Tab dropdown */
+.nav-tab-group{position:relative;height:100%;display:flex;align-items:stretch}
+.nav-tab-group .nav-tab svg{width:8px;height:8px;margin-left:4px;fill:none;stroke:currentColor;stroke-width:2.5;transition:transform .3s}
+.nav-tab-group:hover .nav-tab svg{transform:rotate(180deg)}
+.tab-dropdown{
+  position:absolute;top:100%;right:0;min-width:200px;
+  background:var(--bg-panel);border:1px solid var(--border-green);
+  padding:.4rem 0;opacity:0;visibility:hidden;
+  transition:all .25s;transform:translateY(4px);
+  box-shadow:0 12px 40px rgba(0,0,0,0.6);
+}
+.nav-tab-group:hover .tab-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+.tab-dropdown button{
+  display:flex;align-items:center;gap:8px;width:100%;padding:.55rem 1rem;
+  background:none;border:none;color:var(--text-dim);font-family:var(--mono);
+  font-size:.75rem;cursor:pointer;transition:all .2s;text-align:left;
+}
+.tab-dropdown button:hover{color:var(--green);background:rgba(0,255,136,0.04)}
+.tab-dropdown button .cmd{color:var(--text-muted);font-size:.65rem}
+.tab-dropdown .td-sep{height:1px;background:var(--border);margin:.3rem 0}
 
-/* NAV */
-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  padding: 1.2rem 3rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(10, 14, 23, 0.85);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  transition: all 0.4s;
-}
-nav.scrolled { padding: 0.8rem 3rem; background: rgba(10, 14, 23, 0.95); }
-.nav-logo {
-  font-family: var(--serif);
-  font-size: 1.4rem;
-  color: var(--text-primary);
-  letter-spacing: 0.5px;
-}
-.nav-logo span { color: var(--accent); }
-.nav-links { display: flex; gap: 2.5rem; list-style: none; }
-.nav-links a {
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  transition: color 0.3s;
-  position: relative;
-}
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--accent);
-  transition: width 0.3s;
-}
-.nav-links a:hover { color: var(--text-primary); }
-.nav-links a:hover::after { width: 100%; }
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;z-index:101}
+.hamburger span{display:block;width:20px;height:1.5px;background:var(--green);margin:4px 0;transition:.3s}
 
-.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
-.hamburger span { width: 24px; height: 2px; background: var(--text-secondary); transition: 0.3s; }
+/* ─── PAGES ─── */
+.page{display:none;min-height:100vh;padding-top:48px;position:relative;z-index:1;opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s cubic-bezier(.22,1,.36,1)}
+.page.active{display:block}
+.page.visible{opacity:1;transform:translateY(0)}
 
-/* HERO */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  padding: 8rem 3rem 4rem;
-  overflow: hidden;
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-  animation: pulseGlow 8s ease-in-out infinite;
-}
-.hero::after {
-  content: '';
-  position: absolute;
-  bottom: -30%;
-  left: -10%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
-  animation: pulseGlow 10s ease-in-out infinite reverse;
-}
-@keyframes pulseGlow {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.15); opacity: 1; }
-}
+.panel{max-width:1000px;margin:0 auto;padding:3rem 2rem 4rem}
 
-.hero-content {
-  max-width: 900px;
-  text-align: center;
-  position: relative;
-  z-index: 2;
-}
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0.5rem 1.2rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 2rem;
-  animation: fadeUp 0.8s ease-out both;
-}
-.hero-badge .dot {
-  width: 8px;
-  height: 8px;
-  background: var(--success);
-  border-radius: 50%;
-  animation: blink 2s ease-in-out infinite;
-}
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
+/* Prompt styling */
+.prompt{font-size:.72rem;color:var(--text-muted);margin-bottom:.5rem;font-weight:400}
+.prompt .user{color:var(--green)}
+.prompt .path{color:var(--cyan)}
+.prompt .cmd{color:var(--text)}
 
-.hero h1 {
-  font-family: var(--serif);
-  font-size: clamp(2.8rem, 7vw, 5.5rem);
-  line-height: 1.05;
-  margin-bottom: 1.5rem;
-  animation: fadeUp 0.8s ease-out 0.15s both;
+.page-title{
+  font-family:var(--display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;
+  color:var(--text);margin-bottom:.5rem;letter-spacing:-.5px;line-height:1.2;
 }
-.hero h1 .accent { color: var(--accent-bright); }
-.hero h1 .thin { font-family: var(--sans); font-weight: 300; }
+.page-title span{color:var(--green)}
+.page-divider{height:1px;background:linear-gradient(90deg,var(--green),transparent);margin:1.5rem 0 2.5rem;opacity:.3}
 
-.hero-subtitle {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  color: var(--text-secondary);
-  max-width: 650px;
-  margin: 0 auto 2.5rem;
-  font-weight: 300;
-  animation: fadeUp 0.8s ease-out 0.3s both;
-}
+/* Reveal */
+.reveal{opacity:0;transform:translateY(30px);transition:all .6s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
 
-.hero-cta {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  animation: fadeUp 0.8s ease-out 0.45s both;
+/* Back button */
+.back-home{
+  position:fixed;bottom:1.5rem;left:1.5rem;z-index:90;
+  padding:.5rem 1rem;background:var(--bg-panel);border:1px solid var(--border-green);
+  color:var(--green);font-family:var(--mono);font-size:.72rem;
+  cursor:pointer;display:none;align-items:center;gap:6px;
+  transition:all .3s;
 }
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0.9rem 2rem;
-  border-radius: 8px;
-  font-family: var(--sans);
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  transition: all 0.3s;
-  border: none;
-}
-.btn-primary {
-  background: var(--accent);
-  color: white;
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
-}
-.btn-primary:hover {
-  background: #2563EB;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
-  color: white;
-}
-.btn-outline {
-  background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-}
-.btn-outline:hover {
-  border-color: var(--accent);
-  background: var(--accent-glow);
-  color: white;
-  transform: translateY(-2px);
-}
+.back-home:hover{background:var(--green-glow);border-color:var(--green)}
+.back-home.show{display:inline-flex}
 
-.hero-stats {
-  display: flex;
-  justify-content: center;
-  gap: 3rem;
-  margin-top: 4rem;
-  padding-top: 3rem;
-  border-top: 1px solid var(--border);
-  animation: fadeUp 0.8s ease-out 0.6s both;
+/* ─── HOME / HERO ─── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
+.hero-terminal{
+  max-width:800px;width:100%;
+  background:var(--bg-panel);border:1px solid var(--border-green);
+  padding:0;overflow:hidden;
+  box-shadow:0 0 60px rgba(0,255,136,0.03),0 30px 80px rgba(0,0,0,0.5);
 }
-.stat { text-align: center; }
-.stat-number {
-  font-family: var(--serif);
-  font-size: 2.5rem;
-  color: var(--accent-bright);
-  line-height: 1;
+.terminal-bar{
+  display:flex;align-items:center;padding:.6rem 1rem;gap:8px;
+  background:rgba(0,255,136,0.02);border-bottom:1px solid var(--border-green);
 }
-.stat-label {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-top: 0.3rem;
-}
+.terminal-bar .dots{display:flex;gap:5px}
+.terminal-bar .dots span{width:8px;height:8px;border-radius:50%}
+.terminal-bar .dots .r{background:#ff5f57}.terminal-bar .dots .y{background:#ffbd2e}.terminal-bar .dots .g{background:#28c840}
+.terminal-bar .title{font-size:.65rem;color:var(--text-muted);margin-left:auto}
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+.terminal-body{padding:2rem 2rem 2.5rem;font-size:.85rem;line-height:2}
+.terminal-line{opacity:0;animation:typeLine .4s ease-out forwards}
+.terminal-line:nth-child(1){animation-delay:.3s}
+.terminal-line:nth-child(2){animation-delay:.6s}
+.terminal-line:nth-child(3){animation-delay:.9s}
+.terminal-line:nth-child(4){animation-delay:1.2s}
+.terminal-line:nth-child(5){animation-delay:1.5s}
+.terminal-line:nth-child(6){animation-delay:1.8s}
+.terminal-line:nth-child(7){animation-delay:2.1s}
+.terminal-line:nth-child(8){animation-delay:2.4s}
+.terminal-line:nth-child(9){animation-delay:2.7s}
+.terminal-line:nth-child(10){animation-delay:3s}
+.terminal-line:nth-child(11){animation-delay:3.3s}
+@keyframes typeLine{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
 
-/* SECTIONS */
-section { padding: 6rem 3rem; position: relative; }
-.section-header {
-  text-align: center;
-  margin-bottom: 4rem;
-}
-.section-tag {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  margin-bottom: 0.8rem;
-}
-.section-title {
-  font-family: var(--serif);
-  font-size: clamp(2rem, 4vw, 3rem);
-  line-height: 1.2;
-}
-.section-subtitle {
-  color: var(--text-secondary);
-  font-weight: 300;
-  font-size: 1.1rem;
-  margin-top: 0.8rem;
-  max-width: 550px;
-  margin-left: auto;
-  margin-right: auto;
-}
+.t-green{color:var(--green)}.t-cyan{color:var(--cyan)}.t-amber{color:var(--amber)}.t-dim{color:var(--text-dim)}.t-red{color:var(--red)}.t-bold{font-weight:700}
 
-/* ABOUT */
-#about { background: var(--bg-secondary); }
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  max-width: 1100px;
-  margin: 0 auto;
-  align-items: start;
+.hero-stats{
+  display:flex;gap:2rem;margin-top:2rem;padding-top:1.5rem;
+  border-top:1px solid var(--border-green);
 }
-.about-text p {
-  color: var(--text-secondary);
-  font-size: 1.05rem;
-  margin-bottom: 1.2rem;
-  font-weight: 300;
+.hero-stat{flex:1;text-align:center}
+.hero-stat-num{
+  font-family:var(--display);font-size:2rem;font-weight:800;color:var(--green);line-height:1;
+  text-shadow:0 0 20px rgba(0,255,136,0.3);
 }
-.about-text strong { color: var(--text-primary); font-weight: 600; }
+.hero-stat-label{font-size:.6rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:2px;margin-top:.4rem}
 
-.about-details { display: flex; flex-direction: column; gap: 1.5rem; }
-.detail-card {
-  padding: 1.5rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  transition: all 0.3s;
+.hero-actions{display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap}
+.btn-terminal{
+  padding:.6rem 1.5rem;font-family:var(--mono);font-size:.78rem;font-weight:600;
+  border:1px solid var(--green);color:var(--green);background:transparent;
+  cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:6px;
 }
-.detail-card:hover {
-  border-color: var(--accent);
-  background: var(--bg-card-hover);
-  transform: translateX(4px);
-}
-.detail-card-label {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 0.4rem;
-}
-.detail-card-value {
-  font-size: 1rem;
-  font-weight: 500;
-}
+.btn-terminal:hover{background:var(--green);color:var(--bg);box-shadow:0 0 20px rgba(0,255,136,0.25)}
+.btn-terminal.solid{background:var(--green);color:var(--bg)}
+.btn-terminal.solid:hover{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 20px rgba(0,229,255,0.25)}
 
-/* SKILLS */
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-.skill-card {
-  padding: 2rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  transition: all 0.4s;
-  position: relative;
-  overflow: hidden;
-}
-.skill-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s;
-}
-.skill-card:hover::before { transform: scaleX(1); }
-.skill-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-}
-.skill-icon {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--accent-glow);
-  border-radius: 12px;
-  margin-bottom: 1.2rem;
-  font-size: 1.4rem;
-}
-.skill-card h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.8rem;
-}
-.skill-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-.skill-tag {
-  padding: 0.25rem 0.7rem;
-  background: rgba(59, 130, 246, 0.08);
-  border: 1px solid rgba(59, 130, 246, 0.15);
-  border-radius: 6px;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  font-family: var(--mono);
-}
+/* ─── ABOUT ─── */
+.about-content{display:grid;grid-template-columns:1fr 300px;gap:3rem;align-items:start}
+.about-bio p{color:var(--text-dim);font-size:.88rem;margin-bottom:1rem;line-height:1.9}
+.about-bio strong{color:var(--green);font-weight:600}
+.about-sidebar{display:flex;flex-direction:column;gap:1rem}
+.info-block{padding:1rem;border:1px solid var(--border);background:var(--bg-card);transition:all .3s}
+.info-block:hover{border-color:var(--border-green);background:var(--bg-card-hover)}
+.info-block-label{font-size:.6rem;color:var(--green);text-transform:uppercase;letter-spacing:2px;margin-bottom:.3rem}
+.info-block-value{font-size:.85rem;font-weight:500}
 
-/* EXPERIENCE */
-#experience { background: var(--bg-secondary); }
-.timeline {
-  max-width: 800px;
-  margin: 0 auto;
-  position: relative;
+/* ─── SKILLS ─── */
+.skills-layout{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.skill-block{
+  padding:1.5rem;border:1px solid var(--border);background:var(--bg-card);
+  transition:all .4s;position:relative;overflow:hidden;
 }
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, var(--accent), var(--border));
+.skill-block::after{
+  content:'';position:absolute;top:0;left:0;width:3px;height:0;
+  background:var(--green);transition:height .6s cubic-bezier(.22,1,.36,1);
 }
-.timeline-item {
-  padding-left: 3rem;
-  padding-bottom: 3rem;
-  position: relative;
+.skill-block:hover{border-color:var(--border-green);background:var(--bg-card-hover)}
+.skill-block:hover::after{height:100%}
+.skill-block-title{font-family:var(--display);font-size:1rem;font-weight:700;margin-bottom:.8rem;display:flex;align-items:center;gap:8px}
+.skill-block-title .icon{color:var(--green);font-size:1.1rem}
+.skill-pills{display:flex;flex-wrap:wrap;gap:.35rem}
+.skill-pill{
+  padding:.2rem .6rem;font-size:.68rem;color:var(--text-dim);
+  border:1px solid var(--border);background:transparent;
+  transition:all .3s;
 }
-.timeline-item:last-child { padding-bottom: 0; }
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -5px;
-  top: 6px;
-  width: 12px;
-  height: 12px;
-  background: var(--accent);
-  border-radius: 50%;
-  border: 3px solid var(--bg-secondary);
-  z-index: 1;
-}
-.timeline-date {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  color: var(--accent);
-  letter-spacing: 1px;
-  margin-bottom: 0.3rem;
-}
-.timeline-role {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.15rem;
-}
-.timeline-company {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  margin-bottom: 0.4rem;
-}
-.timeline-scope {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  font-style: italic;
-  margin-bottom: 0.6rem;
-}
-.timeline-desc {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  font-weight: 300;
-  line-height: 1.7;
-}
+.skill-pill:hover{color:var(--green);border-color:var(--green);background:var(--green-glow)}
 
-/* CERTIFICATIONS */
-.certs-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  max-width: 900px;
-  margin: 0 auto;
-}
-.cert-card {
-  padding: 1.8rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  text-align: center;
-  transition: all 0.3s;
-}
-.cert-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-3px);
-}
-.cert-issuer {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 0.6rem;
-}
-.cert-name {
-  font-weight: 600;
-  font-size: 0.95rem;
-  margin-bottom: 0.3rem;
-}
-.cert-year {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
+/* ─── PROFICIENCY ─── */
+.prof-list{display:flex;flex-direction:column;gap:1.4rem;max-width:700px}
+.prof-item{display:flex;flex-direction:column;gap:.4rem}
+.prof-header{display:flex;justify-content:space-between;font-size:.8rem}
+.prof-name{font-weight:500}.prof-pct{color:var(--green)}
+.prof-track{height:4px;background:var(--border);position:relative;overflow:hidden}
+.prof-fill{height:100%;width:0%;background:var(--green);transition:width 1.2s cubic-bezier(.22,1,.36,1);box-shadow:0 0 8px rgba(0,255,136,0.4)}
 
-/* RESUME DOWNLOAD */
-#resume {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  text-align: center;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+/* ─── TIMELINE ─── */
+.tl{max-width:750px;position:relative;padding-left:2.5rem}
+.tl-line{position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--border)}
+.tl-fill{position:absolute;left:0;top:0;width:1px;height:0;background:var(--green);box-shadow:0 0 6px rgba(0,255,136,0.4);transition:height .3s}
+.tl-item{padding-bottom:2.5rem;position:relative;opacity:0;transform:translateX(-15px);transition:all .5s cubic-bezier(.22,1,.36,1)}
+.tl-item.visible{opacity:1;transform:translateX(0)}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{
+  content:'';position:absolute;left:-2.5rem;top:4px;width:8px;height:8px;
+  border:1px solid var(--border);background:var(--bg);
+  transform:rotate(45deg);z-index:2;transition:all .4s;margin-left:-3.5px;
 }
-.resume-box {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 3rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  position: relative;
-  overflow: hidden;
-}
-.resume-box::before {
-  content: '';
-  position: absolute;
-  top: -1px;
-  left: 20%;
-  right: 20%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-}
-.resume-icon {
-  font-size: 3rem;
-  margin-bottom: 1.2rem;
-}
-.resume-box h3 {
-  font-family: var(--serif);
-  font-size: 1.6rem;
-  margin-bottom: 0.5rem;
-}
-.resume-box p {
-  color: var(--text-secondary);
-  font-weight: 300;
-  margin-bottom: 2rem;
-}
+.tl-item.visible::before{border-color:var(--green);background:var(--green);box-shadow:0 0 8px rgba(0,255,136,0.5)}
+.tl-date{font-size:.68rem;color:var(--green);letter-spacing:1px;margin-bottom:.2rem}
+.tl-role{font-family:var(--display);font-size:1.05rem;font-weight:700;margin-bottom:.1rem}
+.tl-company{color:var(--text-dim);font-size:.85rem;margin-bottom:.3rem}
+.tl-scope{font-size:.7rem;color:var(--text-muted);font-style:italic;margin-bottom:.5rem}
+.tl-desc{color:var(--text-dim);font-size:.8rem;line-height:1.8}
 
-/* CONTACT */
-#contact { background: var(--bg-secondary); }
-.contact-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  max-width: 1000px;
-  margin: 0 auto;
+/* ─── TESTIMONIALS ─── */
+.test-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.test-card{
+  padding:1.5rem;border:1px solid var(--border);background:var(--bg-card);
+  position:relative;transition:all .4s;
 }
-.contact-card {
-  padding: 2rem 1.5rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  text-align: center;
-  transition: all 0.3s;
+.test-card::before{content:'>';position:absolute;top:1rem;left:1rem;color:var(--green);font-weight:700;opacity:.15;font-size:2rem;line-height:1}
+.test-card:hover{border-color:var(--border-green);background:var(--bg-card-hover)}
+.test-card.featured{grid-column:1/-1;border-color:var(--border-green);background:var(--green-glow)}
+.test-text{color:var(--text-dim);font-size:.82rem;line-height:1.9;margin-bottom:1.2rem;padding-left:1rem;border-left:2px solid var(--border);font-style:italic}
+.test-card.featured .test-text{border-left-color:var(--green)}
+.test-author{display:flex;align-items:center;gap:10px}
+.test-avatar{
+  width:32px;height:32px;border:1px solid var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:700;color:var(--green);flex-shrink:0;
 }
-.contact-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-3px);
-}
-.contact-icon {
-  font-size: 1.8rem;
-  margin-bottom: 0.8rem;
-}
-.contact-label {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 0.4rem;
-}
-.contact-value {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  word-break: break-all;
-}
+.test-name{font-size:.8rem;font-weight:600}
+.test-role{font-size:.65rem;color:var(--text-muted)}
 
-/* FOOTER */
-footer {
-  padding: 2.5rem 3rem;
-  text-align: center;
-  border-top: 1px solid var(--border);
-}
-footer p {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
+/* ─── CERTS ─── */
+.certs-list{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:800px}
+.cert-item{padding:1.5rem;border:1px solid var(--border);background:var(--bg-card);text-align:center;transition:all .3s}
+.cert-item:hover{border-color:var(--border-green)}
+.cert-issuer{font-size:.6rem;color:var(--green);text-transform:uppercase;letter-spacing:2px;margin-bottom:.5rem}
+.cert-title{font-size:.85rem;font-weight:600}
+.cert-year{font-size:.7rem;color:var(--text-muted);margin-top:.4rem}
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  nav { padding: 1rem 1.5rem; }
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  .nav-links.open {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: var(--bg-primary);
-    border-bottom: 1px solid var(--border);
-    padding: 1.5rem;
-    gap: 1.2rem;
-  }
-  section { padding: 4rem 1.5rem; }
-  .hero { padding: 7rem 1.5rem 3rem; }
-  .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
-  .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .skills-grid { grid-template-columns: 1fr; }
-  .certs-grid { grid-template-columns: 1fr; }
-  .contact-grid { grid-template-columns: 1fr 1fr; }
-  .stat-number { font-size: 2rem; }
-}
-@media (max-width: 500px) {
-  .contact-grid { grid-template-columns: 1fr; }
-  .hero-cta { flex-direction: column; align-items: center; }
+/* ─── RESUME ─── */
+.resume-block{max-width:500px;text-align:center;margin:0 auto;padding:3rem;border:1px solid var(--border-green);background:var(--bg-card)}
+.resume-block h3{font-family:var(--display);font-size:1.3rem;font-weight:700;margin-bottom:.5rem}
+.resume-block p{color:var(--text-dim);font-size:.85rem;margin-bottom:1.5rem}
+
+/* ─── CONTACT ─── */
+.contact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;max-width:600px}
+.contact-item{padding:1.2rem;border:1px solid var(--border);background:var(--bg-card);transition:all .3s;display:flex;align-items:center;gap:12px}
+.contact-item:hover{border-color:var(--border-green)}
+.contact-item .ci-icon{color:var(--green);font-size:1.2rem;flex-shrink:0;width:24px;text-align:center}
+.contact-item .ci-label{font-size:.6rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+.contact-item .ci-value{font-size:.82rem;font-weight:500}
+
+/* Footer */
+footer{padding:2rem;text-align:center;font-size:.65rem;color:var(--text-muted);border-top:1px solid var(--border);position:relative;z-index:1}
+footer span{color:var(--green)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+  nav{padding:0 1rem}
+  .nav-title{display:none}
+  .nav-tabs{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,10,0.98);flex-direction:column;align-items:center;justify-content:center;gap:.5rem;z-index:99}
+  .nav-tabs.open{display:flex}
+  .nav-tab{height:auto;padding:.8rem 1.5rem;font-size:.85rem}
+  .nav-tab-group{height:auto;flex-direction:column;align-items:center}
+  .tab-dropdown{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:none;background:transparent;display:none}
+  .nav-tab-group.mob-open .tab-dropdown{display:block}
+  .tab-dropdown button{justify-content:center;font-size:.82rem}
+  .hamburger{display:block}
+  .panel{padding:2rem 1.2rem 3rem}
+  .about-content{grid-template-columns:1fr}
+  .skills-layout{grid-template-columns:1fr}
+  .test-grid{grid-template-columns:1fr}
+  .test-card.featured{grid-column:auto}
+  .certs-list{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .hero{padding:1rem}
+  .terminal-body{padding:1.5rem}
+  .hero-stats{flex-direction:column;gap:1rem}
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav id="navbar">
-  <div class="nav-logo">R<span>.</span>Dzoagbe</div>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#about">About</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#certs">Certifications</a></li>
-    <li><a href="#resume">Resume</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-    <span></span><span></span><span></span>
-  </button>
+<!-- NAV / Terminal Toolbar -->
+<nav>
+  <div class="nav-dots"><span class="d-red"></span><span class="d-yellow"></span><span class="d-green"></span></div>
+  <div class="nav-title"><span>rdzoagbe</span>@infra:~$ portfolio --interactive</div>
+  <div class="nav-tabs" id="navTabs">
+    <button class="nav-tab active" data-page="home"><span class="tab-dot"></span>home</button>
+    <button class="nav-tab" data-page="about"><span class="tab-dot"></span>about</button>
+    <div class="nav-tab-group">
+      <button class="nav-tab" data-page="skills"><span class="tab-dot"></span>expertise <svg viewBox="0 0 12 12"><polyline points="2 4 6 8 10 4"/></svg></button>
+      <div class="tab-dropdown">
+        <button data-page="skills">$ cat skills.conf</button>
+        <button data-page="proficiency">$ top --proficiency</button>
+        <div class="td-sep"></div>
+        <button data-page="certs">$ ls /certs/</button>
+      </div>
+    </div>
+    <button class="nav-tab" data-page="experience"><span class="tab-dot"></span>experience</button>
+    <div class="nav-tab-group">
+      <button class="nav-tab" data-page="testimonials"><span class="tab-dot"></span>more <svg viewBox="0 0 12 12"><polyline points="2 4 6 8 10 4"/></svg></button>
+      <div class="tab-dropdown">
+        <button data-page="testimonials">$ echo reviews</button>
+        <button data-page="resume">$ wget cv.pdf</button>
+        <div class="td-sep"></div>
+        <button data-page="contact">$ ping roland</button>
+      </div>
+    </div>
+  </div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-content">
-    <div class="hero-badge"><span class="dot"></span> Open to Opportunities</div>
-    <h1>Roland <span class="accent">Dzoagbe</span></h1>
-    <h1 class="thin" style="font-size:clamp(1.2rem,3vw,1.8rem); margin-top:-0.5rem; margin-bottom:1.5rem;">Senior IT Infrastructure &amp; Cyber Operations Manager</h1>
-    <p class="hero-subtitle">Securing complex multi-site environments, leading high-performing teams, and aligning technology with business strategy across mission-critical international operations.</p>
-    <div class="hero-cta">
-      <a href="#resume" class="btn btn-primary">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-        Download Resume
-      </a>
-      <a href="#contact" class="btn btn-outline">Get in Touch</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-number">10+</div>
-        <div class="stat-label">Years Experience</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">600+</div>
-        <div class="stat-label">Users Managed</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">80%</div>
-        <div class="stat-label">MTTR Reduction</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">8</div>
-        <div class="stat-label">Engineers Led</div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- Back home -->
+<button class="back-home" id="backHome">← cd ~</button>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-header">
-    <div class="section-tag">// About Me</div>
-    <h2 class="section-title">Who I Am</h2>
-  </div>
-  <div class="about-grid">
-    <div class="about-text">
-      <p><strong>Senior IT Infrastructure & Operations Manager</strong> with over a decade of experience securing and operating complex, multi-site environments in mission-critical and regulated sectors.</p>
-      <p>I have a proven track record of deploying resilient infrastructure, reducing cyber risk, and leading cross-functional teams (N1&ndash;N3) serving 600+ users. I specialise in aligning technology strategy with business objectives, managing vendor ecosystems, and ensuring operational continuity in international environments.</p>
-      <p>I am seeking to bring my deep expertise in <strong>endpoint protection, identity governance, Microsoft 365/Azure administration, and IT service management</strong> to a senior IT leadership role within a forward-thinking organisation.</p>
+<!-- ═══ HOME ═══ -->
+<div class="page active visible" id="page-home">
+  <section class="hero">
+    <div class="hero-terminal">
+      <div class="terminal-bar">
+        <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        <div class="title">rdzoagbe@infra:~$</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line"><span class="t-dim">$</span> <span class="t-green">whoami</span></div>
+        <div class="terminal-line"><span class="t-bold" style="font-family:var(--display);font-size:1.8rem;letter-spacing:-1px">Roland Dzoagbe</span></div>
+        <div class="terminal-line"><span class="t-dim">$</span> <span class="t-green">cat</span> role.txt</div>
+        <div class="terminal-line"><span class="t-cyan">Senior IT Infrastructure & Cyber Operations Manager</span></div>
+        <div class="terminal-line"><span class="t-dim">$</span> <span class="t-green">cat</span> summary.txt</div>
+        <div class="terminal-line t-dim" style="font-size:.82rem">IT leader with 10+ years of experience. From frontline support to managing</div>
+        <div class="terminal-line t-dim" style="font-size:.82rem">600+ users across international mission-critical operations. Expert in</div>
+        <div class="terminal-line t-dim" style="font-size:.82rem">Microsoft 365, Azure, Entra ID, ITIL, and enterprise cybersecurity.</div>
+        <div class="terminal-line"><span class="t-dim">$</span> <span class="t-green">echo</span> <span class="t-amber">$STATUS</span></div>
+        <div class="terminal-line"><span class="t-green">● OPEN TO OPPORTUNITIES</span> <span class="t-dim">— Île-de-France</span></div>
+        <div class="terminal-line"><span class="t-dim">$</span> <span class="t-green blink-cursor">█</span></div>
+
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="hero-stat-num"><span class="counter" data-target="10" data-suffix="+">0</span></div><div class="hero-stat-label">Years XP</div></div>
+          <div class="hero-stat"><div class="hero-stat-num"><span class="counter" data-target="600" data-suffix="+">0</span></div><div class="hero-stat-label">Users</div></div>
+          <div class="hero-stat"><div class="hero-stat-num"><span class="counter" data-target="80" data-suffix="%">0</span></div><div class="hero-stat-label">MTTR ↓</div></div>
+          <div class="hero-stat"><div class="hero-stat-num"><span class="counter" data-target="30" data-suffix="%">0</span></div><div class="hero-stat-label">Faster Deploy</div></div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="Roland_Dzoagbe_CV.pdf" class="btn-terminal solid" download>⬇ wget cv.pdf</a>
+          <button class="btn-terminal" data-page="contact">$ ping roland</button>
+          <button class="btn-terminal" data-page="about">$ man roland</button>
+        </div>
+      </div>
     </div>
-    <div class="about-details">
-      <div class="detail-card">
-        <div class="detail-card-label">Location</div>
-        <div class="detail-card-value">Bondy, Île-de-France, France</div>
+  </section>
+</div>
+
+<!-- ═══ ABOUT ═══ -->
+<div class="page" id="page-about">
+  <div class="panel">
+    <div class="prompt reveal"><span class="user">rdzoagbe</span>@infra:<span class="path">~/about</span>$ <span class="cmd">cat profile.md</span></div>
+    <h1 class="page-title reveal">About <span>Me</span></h1>
+    <div class="page-divider reveal"></div>
+    <div class="about-content">
+      <div class="about-bio">
+        <p class="reveal">I went from frontline support to <strong>managing 600+ users across international mission-critical operations</strong> in under 7 years. My career is defined by rapid growth, hands-on technical depth, and a proven ability to align IT with business objectives.</p>
+        <p class="reveal">I specialise in <strong>Microsoft 365, Azure, Entra ID</strong>, <strong>Intune, Windows Server, ITIL, ServiceNow</strong>, and <strong>enterprise cybersecurity</strong> — including Defender, MFA, firewalls, IAM, and GDPR compliance. I bring strong experience in <strong>PowerShell/Bash automation</strong>, BCP/disaster recovery, and vendor/budget management.</p>
+        <p class="reveal">Bilingual <strong>English/French</strong>, I thrive in high-pressure, multi-site environments where security, uptime, and team leadership are non-negotiable.</p>
       </div>
-      <div class="detail-card">
-        <div class="detail-card-label">Languages</div>
-        <div class="detail-card-value">English (Native) &bull; French (Professional)</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-label">Sectors of Interest</div>
-        <div class="detail-card-value">Technology &bull; Media &bull; Finance &bull; Automotive &bull; All Sectors</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-label">Community</div>
-        <div class="detail-card-value">ConnectedKidsGH &mdash; Digital Inclusion Initiatives</div>
+      <div class="about-sidebar">
+        <div class="info-block reveal"><div class="info-block-label">Location</div><div class="info-block-value">Bondy, Île-de-France</div></div>
+        <div class="info-block reveal"><div class="info-block-label">Focus</div><div class="info-block-value">Infra · Cybersec · Ops</div></div>
+        <div class="info-block reveal"><div class="info-block-label">Languages</div><div class="info-block-value">English (Native) · French (Pro)</div></div>
+        <div class="info-block reveal"><div class="info-block-label">Team Scale</div><div class="info-block-value">Up to 8 (N1–N3) · 600+ users</div></div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- SKILLS -->
-<section id="skills">
-  <div class="section-header">
-    <div class="section-tag">// Core Competencies</div>
-    <h2 class="section-title">What I Bring</h2>
-    <p class="section-subtitle">Deep technical expertise combined with leadership and business alignment skills.</p>
-  </div>
-  <div class="skills-grid">
-    <div class="skill-card">
-      <div class="skill-icon">&#x1F6E1;</div>
-      <h3>Security &amp; Compliance</h3>
-      <div class="skill-tags">
-        <span class="skill-tag">Microsoft Defender</span>
-        <span class="skill-tag">MFA</span>
-        <span class="skill-tag">Identity Governance</span>
-        <span class="skill-tag">Incident Response</span>
-        <span class="skill-tag">Compliance</span>
-        <span class="skill-tag">Risk Reduction</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-icon">&#x2601;</div>
-      <h3>Cloud &amp; Infrastructure</h3>
-      <div class="skill-tags">
-        <span class="skill-tag">Microsoft 365</span>
-        <span class="skill-tag">Azure AD</span>
-        <span class="skill-tag">Intune</span>
-        <span class="skill-tag">SCCM</span>
-        <span class="skill-tag">Autopilot</span>
-        <span class="skill-tag">Okta</span>
-        <span class="skill-tag">Jamf</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-icon">&#x1F5A7;</div>
-      <h3>Networking &amp; Platforms</h3>
-      <div class="skill-tags">
-        <span class="skill-tag">Cisco</span>
-        <span class="skill-tag">TCP/IP</span>
-        <span class="skill-tag">DNS</span>
-        <span class="skill-tag">HTTP</span>
-        <span class="skill-tag">Windows</span>
-        <span class="skill-tag">macOS</span>
-        <span class="skill-tag">Linux</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-icon">&#x1F4CB;</div>
-      <h3>ITSM &amp; Tooling</h3>
-      <div class="skill-tags">
-        <span class="skill-tag">ServiceNow</span>
-        <span class="skill-tag">GLPI</span>
-        <span class="skill-tag">Jira</span>
-        <span class="skill-tag">Zendesk</span>
-        <span class="skill-tag">Active Directory</span>
-        <span class="skill-tag">Citrix</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-icon">&#x1F465;</div>
-      <h3>Leadership &amp; Operations</h3>
-      <div class="skill-tags">
-        <span class="skill-tag">Team Management N1–N3</span>
-        <span class="skill-tag">Budget Mgmt</span>
-        <span class="skill-tag">Vendor Mgmt</span>
-        <span class="skill-tag">SLA Compliance</span>
-        <span class="skill-tag">24/7 Ops</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-icon">&#x1F4C8;</div>
-      <h3>Strategy &amp; Governance</h3>
-      <div class="skill-tags">
-        <span class="skill-tag">Executive Reporting</span>
-        <span class="skill-tag">Stakeholder Mgmt</span>
-        <span class="skill-tag">Business Alignment</span>
-        <span class="skill-tag">Procurement</span>
-        <span class="skill-tag">Dashboards</span>
-      </div>
+<!-- ═══ SKILLS ═══ -->
+<div class="page" id="page-skills">
+  <div class="panel">
+    <div class="prompt reveal"><span class="user">rdzoagbe</span>@infra:<span class="path">~/skills</span>$ <span class="cmd">cat skills.conf</span></div>
+    <h1 class="page-title reveal">Skills & <span>Tools</span></h1>
+    <div class="page-divider reveal"></div>
+    <div class="skills-layout">
+      <div class="skill-block reveal"><div class="skill-block-title"><span class="icon">🛡</span> Security & Compliance</div><div class="skill-pills"><span class="skill-pill">Microsoft Defender</span><span class="skill-pill">MFA</span><span class="skill-pill">IAM</span><span class="skill-pill">Conditional Access</span><span class="skill-pill">Firewall Mgmt</span><span class="skill-pill">GDPR</span><span class="skill-pill">DLP</span><span class="skill-pill">BCP / DR</span><span class="skill-pill">Incident Response</span></div></div>
+      <div class="skill-block reveal"><div class="skill-block-title"><span class="icon">☁</span> Cloud & Identity</div><div class="skill-pills"><span class="skill-pill">Microsoft 365</span><span class="skill-pill">Azure</span><span class="skill-pill">Entra ID</span><span class="skill-pill">Intune</span><span class="skill-pill">SCCM</span><span class="skill-pill">Autopilot</span><span class="skill-pill">Okta</span><span class="skill-pill">Google Admin</span></div></div>
+      <div class="skill-block reveal"><div class="skill-block-title"><span class="icon">🖥</span> Infrastructure</div><div class="skill-pills"><span class="skill-pill">Windows Server</span><span class="skill-pill">VMware</span><span class="skill-pill">Citrix</span><span class="skill-pill">Jamf</span><span class="skill-pill">Active Directory</span></div></div>
+      <div class="skill-block reveal"><div class="skill-block-title"><span class="icon">🌐</span> Networking</div><div class="skill-pills"><span class="skill-pill">Cisco</span><span class="skill-pill">TCP/IP</span><span class="skill-pill">DNS</span><span class="skill-pill">VPN</span><span class="skill-pill">Windows</span><span class="skill-pill">macOS</span><span class="skill-pill">Linux</span></div></div>
+      <div class="skill-block reveal"><div class="skill-block-title"><span class="icon">⚙</span> Scripting & Automation</div><div class="skill-pills"><span class="skill-pill">PowerShell</span><span class="skill-pill">Bash</span><span class="skill-pill">IAM Automation</span><span class="skill-pill">Intune Scripts</span><span class="skill-pill">M365 Automation</span></div></div>
+      <div class="skill-block reveal"><div class="skill-block-title"><span class="icon">📋</span> ITSM & Leadership</div><div class="skill-pills"><span class="skill-pill">ServiceNow</span><span class="skill-pill">Jira</span><span class="skill-pill">GLPI</span><span class="skill-pill">Zendesk</span><span class="skill-pill">ITIL</span><span class="skill-pill">Team N1–N3</span><span class="skill-pill">Budget Mgmt</span><span class="skill-pill">SLA Compliance</span></div></div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- EXPERIENCE -->
-<section id="experience">
-  <div class="section-header">
-    <div class="section-tag">// Career Path</div>
-    <h2 class="section-title">Professional Experience</h2>
-  </div>
-  <div class="timeline">
-
-    <div class="timeline-item">
-      <div class="timeline-date">Apr 2025 — Dec 2025</div>
-      <div class="timeline-role">Infrastructure &amp; Support Manager</div>
-      <div class="timeline-company">Host Broadcast Services (HBS)</div>
-      <div class="timeline-scope">Multi-site | 8 engineers | 600+ users | 24/7 mission-critical</div>
-      <div class="timeline-desc">Led IT infrastructure operations across international broadcast sites. Reduced MTTR by 80%, deployed Microsoft Defender &amp; MFA at scale, coordinated security incidents, and partnered with executive stakeholders to align IT with business objectives.</div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-date">Mar 2024 — Mar 2025</div>
-      <div class="timeline-role">IT Manager</div>
-      <div class="timeline-company">The iLUKA Collective (Olympic &amp; Paralympic Games)</div>
-      <div class="timeline-scope">Multi-site events | 250+ users | Multiple vendors</div>
-      <div class="timeline-desc">Ensured security compliance, access governance, and audit traceability. Coordinated vendors for uninterrupted event delivery and oversaw IT budget planning and procurement.</div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-date">May 2023 — Oct 2023</div>
-      <div class="timeline-role">Corporate IT Manager</div>
-      <div class="timeline-company">AKUR8 (InsurTech SaaS)</div>
-      <div class="timeline-scope">SaaS environment | International users | IAM-focused</div>
-      <div class="timeline-desc">Led IT operations in a high-growth SaaS environment. Administered IAM systems (Okta, Google Admin), managed IT budget, and led escalation management.</div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-date">Jul 2022 — Mar 2023</div>
-      <div class="timeline-role">IT Manager</div>
-      <div class="timeline-company">Zenly (Snapchat Group)</div>
-      <div class="timeline-scope">International SaaS | 180+ users | Fast-paced scale-up</div>
-      <div class="timeline-desc">Managed IT infrastructure and end-user support for 180+ international users. Administered Okta and Google Admin, optimising resources and processes.</div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-date">Jun 2021 — Jul 2022</div>
-      <div class="timeline-role">Technical Support Analyst</div>
-      <div class="timeline-company">Dechert LLP (International Law Firm)</div>
-      <div class="timeline-scope">Multi-country: Paris, Luxembourg, Brussels</div>
-      <div class="timeline-desc">Provided IT support via ServiceNow across regulated environments. Administered Active Directory, Citrix Workspace, and managed MDM fleet.</div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-date">Apr 2020 — Feb 2021</div>
-      <div class="timeline-role">Migration Technician / IT Supervisor</div>
-      <div class="timeline-company">Artemys Paris</div>
-      <div class="timeline-scope">200+ users | Microsoft 365 &amp; Azure</div>
-      <div class="timeline-desc">Provided Tier 2/3 support, administered M365 and Azure environments, and configured Cisco switches.</div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-date">Feb 2019 — Apr 2020</div>
-      <div class="timeline-role">L1/L2 Support Technician</div>
-      <div class="timeline-company">Cabinet Alain Bensousan</div>
-      <div class="timeline-desc">Managed IT estate for ~200 users. Administered Active Directory accounts and deployed IT equipment.</div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-date">Mar 2008 — Feb 2017</div>
-      <div class="timeline-role">IT Support &amp; Systems Administration</div>
-      <div class="timeline-company">Freelance / Independent</div>
-      <div class="timeline-desc">Delivered hardware, systems, and end-user support services, building foundational expertise in infrastructure and customer support.</div>
-    </div>
-
-  </div>
-</section>
-
-<!-- CERTIFICATIONS -->
-<section id="certs">
-  <div class="section-header">
-    <div class="section-tag">// Credentials</div>
-    <h2 class="section-title">Certifications</h2>
-  </div>
-  <div class="certs-grid">
-    <div class="cert-card">
-      <div class="cert-issuer">Alison</div>
-      <div class="cert-name">Microsoft Azure Administrator — Advanced Certificate</div>
-      <div class="cert-year">2026</div>
-    </div>
-    <div class="cert-card">
-      <div class="cert-issuer">Cisco</div>
-      <div class="cert-name">Introduction to Cybersecurity</div>
-      <div class="cert-year">2023</div>
-    </div>
-    <div class="cert-card">
-      <div class="cert-issuer">Google / Coursera</div>
-      <div class="cert-name">Cybersecurity Fundamentals</div>
-      <div class="cert-year">2024</div>
+<!-- ═══ PROFICIENCY ═══ -->
+<div class="page" id="page-proficiency">
+  <div class="panel">
+    <div class="prompt reveal"><span class="user">rdzoagbe</span>@infra:<span class="path">~/skills</span>$ <span class="cmd">top --proficiency</span></div>
+    <h1 class="page-title reveal">Core <span>Proficiency</span></h1>
+    <div class="page-divider reveal"></div>
+    <div class="prof-list">
+      <div class="prof-item reveal"><div class="prof-header"><span class="prof-name">Microsoft 365 / Azure / Entra ID</span><span class="prof-pct">95%</span></div><div class="prof-track"><div class="prof-fill" data-width="95"></div></div></div>
+      <div class="prof-item reveal"><div class="prof-header"><span class="prof-name">Cybersecurity (Defender / MFA / IAM)</span><span class="prof-pct">90%</span></div><div class="prof-track"><div class="prof-fill" data-width="90"></div></div></div>
+      <div class="prof-item reveal"><div class="prof-header"><span class="prof-name">ITIL / ITSM / ServiceNow</span><span class="prof-pct">90%</span></div><div class="prof-track"><div class="prof-fill" data-width="90"></div></div></div>
+      <div class="prof-item reveal"><div class="prof-header"><span class="prof-name">Windows Server / Active Directory</span><span class="prof-pct">88%</span></div><div class="prof-track"><div class="prof-fill" data-width="88"></div></div></div>
+      <div class="prof-item reveal"><div class="prof-header"><span class="prof-name">PowerShell / Bash Automation</span><span class="prof-pct">80%</span></div><div class="prof-track"><div class="prof-fill" data-width="80"></div></div></div>
+      <div class="prof-item reveal"><div class="prof-header"><span class="prof-name">GDPR / Compliance / BCP-DR</span><span class="prof-pct">85%</span></div><div class="prof-track"><div class="prof-fill" data-width="85"></div></div></div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- RESUME DOWNLOAD -->
-<section id="resume">
-  <div class="section-header">
-    <div class="section-tag">// Download</div>
-    <h2 class="section-title">Get My Resume</h2>
+<!-- ═══ EXPERIENCE ═══ -->
+<div class="page" id="page-experience">
+  <div class="panel">
+    <div class="prompt reveal"><span class="user">rdzoagbe</span>@infra:<span class="path">~/career</span>$ <span class="cmd">git log --oneline</span></div>
+    <h1 class="page-title reveal">Professional <span>Experience</span></h1>
+    <div class="page-divider reveal"></div>
+    <div class="tl">
+      <div class="tl-line"></div><div class="tl-fill" id="tlFill"></div>
+      <div class="tl-item"><div class="tl-date">Apr 2025 — Dec 2025</div><div class="tl-role">Infrastructure & Support Manager</div><div class="tl-company">Host Broadcast Services (HBS)</div><div class="tl-scope">Multi-site · 8 engineers (N1–N3) · 600+ users · 24/7 broadcast</div><div class="tl-desc">Led IT infra ops across international broadcast sites. 80% MTTR reduction via ITIL. Deployed Defender, MFA, firewalls at scale. PowerShell automation. BCP/DR coordination. Executive dashboards.</div></div>
+      <div class="tl-item"><div class="tl-date">Mar 2024 — Mar 2025</div><div class="tl-role">IT Manager</div><div class="tl-company">The iLUKA Collective (Olympic & Paralympic Games)</div><div class="tl-scope">250+ users · Multi-site events · Mission-critical</div><div class="tl-desc">Security compliance, GDPR access governance, audit traceability. Vendor coordination. Ticketing platforms (Eventim). Budget planning & change management.</div></div>
+      <div class="tl-item"><div class="tl-date">May 2023 — Oct 2023</div><div class="tl-role">Corporate IT Manager</div><div class="tl-company">AKUR8 (InsurTech SaaS)</div><div class="tl-scope">SaaS · International · IAM-focused · High-growth</div><div class="tl-desc">IT ops in scaling SaaS. IAM admin (Okta, Google Admin) for 50+ users. Budget, procurement, ITIL change management.</div></div>
+      <div class="tl-item"><div class="tl-date">Jul 2022 — Mar 2023</div><div class="tl-role">IT Manager</div><div class="tl-company">Zenly (Snapchat Group)</div><div class="tl-scope">180+ users · International SaaS · Scale-up</div><div class="tl-desc">Full-stack IT infra + end-user support (Win/Mac/Linux). 15% SaaS cost reduction via access audits. Doc & DR improvements.</div></div>
+      <div class="tl-item"><div class="tl-date">Jun 2021 — Jul 2022</div><div class="tl-role">Technical Support Analyst</div><div class="tl-company">Dechert LLP (International Law Firm)</div><div class="tl-scope">Paris · Luxembourg · Brussels · GDPR-regulated</div><div class="tl-desc">Multi-country IT support via ServiceNow. 99%+ SLA. AD, Windows Server, Citrix, MDM fleet management.</div></div>
+      <div class="tl-item"><div class="tl-date">Feb 2018 — Feb 2021</div><div class="tl-role">IT Technician / IT Supervisor</div><div class="tl-company">Artemys Paris</div><div class="tl-scope">200+ users · Tier 2/3 · DBV Technologies, OPCO Santé</div><div class="tl-desc">M365, Azure, Google Workspace admin. Windows Server migrations. Cisco switch config → 25% uptime improvement.</div></div>
+      <div class="tl-item"><div class="tl-date">Feb 2017 — Jan 2018</div><div class="tl-role">L1/L2 Support Technician</div><div class="tl-company">Cabinet Alain Bensousan</div><div class="tl-desc">First IT role. AD administration, IT estate, equipment deployment, mobile fleet for ~200 users.</div></div>
+      <div class="tl-item"><div class="tl-date">2009 — 2017</div><div class="tl-role">Healthcare Sector</div><div class="tl-company">Previous Career</div><div class="tl-desc">Communication, problem-solving, and high-pressure ops skills transferable to IT leadership.</div></div>
+    </div>
   </div>
-  <div class="resume-box">
-    <div class="resume-icon">&#x1F4C4;</div>
-    <h3>Full Professional Resume</h3>
-    <p>My complete CV covering IT Infrastructure, Cybersecurity, Operations Management, and team leadership across mission-critical environments.</p>
-    <a href="Roland_Dzoagbe.pdf" class="btn btn-primary" download>
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-      Download.pdf
-    </a>
-  </div>
-</section>
+</div>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="section-header">
-    <div class="section-tag">// Let's Connect</div>
-    <h2 class="section-title">Contact</h2>
-    <p class="section-subtitle">Open to senior IT infrastructure and operations leadership roles across Île-de-France.</p>
-  </div>
-  <div class="contact-grid">
-    <div class="contact-card">
-      <div class="contact-icon">&#x1F4DE;</div>
-      <div class="contact-label">Phone</div>
-      <div class="contact-value">+33 7 82 88 46 46</div>
-    </div>
-    <div class="contact-card">
-      <div class="contact-icon">&#x2709;</div>
-      <div class="contact-label">Email</div>
-      <div class="contact-value"><a href="mailto:rolanddzoagbe@gmail.com">rolanddzoagbe@gmail.com</a></div>
-    </div>
-    <div class="contact-card">
-      <div class="contact-icon">&#x1F310;</div>
-      <div class="contact-label">LinkedIn</div>
-      <div class="contact-value"><a href="https://linkedin.com/in/r-dz" target="_blank">linkedin.com/in/r-dz</a></div>
-    </div>
-    <div class="contact-card">
-      <div class="contact-icon">&#x1F4CD;</div>
-      <div class="contact-label">Location</div>
-      <div class="contact-value">Bondy, France</div>
+<!-- ═══ TESTIMONIALS ═══ -->
+<div class="page" id="page-testimonials">
+  <div class="panel">
+    <div class="prompt reveal"><span class="user">rdzoagbe</span>@infra:<span class="path">~/reviews</span>$ <span class="cmd">echo $RECOMMENDATIONS</span></div>
+    <h1 class="page-title reveal">What Colleagues <span>Say</span></h1>
+    <div class="page-divider reveal"></div>
+    <div class="test-grid">
+      <div class="test-card featured reveal"><div class="test-text">Roland was a fantastic colleague to be around, and a key member of my team during the Olympics! Roland is very skilled, very willing to support others and find solutions so that everyone is fully equipped from an IT perspective. Roland is also organized and meticulous. And more importantly, Roland is an excellent human. I would love to work with Roland again!</div><div class="test-author"><div class="test-avatar">LG</div><div><div class="test-name">Lisa Gregoire</div><div class="test-role">Sports Partnerships — Senior to Roland</div></div></div></div>
+      <div class="test-card reveal"><div class="test-text">An absolute gem who worked very hard to deliver all Paris 2024 project milestones and successfully so. Amiable, hard working and very helpful, an asset to any team. Highly recommended.</div><div class="test-author"><div class="test-avatar">DK</div><div><div class="test-name">Driton Koshutova</div><div class="test-role">Consultant — Managed Roland directly</div></div></div></div>
+      <div class="test-card reveal"><div class="test-text">Roland is such a team player - always willing to help out, whatever the task and always wearing a big smile! Great at his job, skilled and experienced, I would highly recommend Roland.</div><div class="test-author"><div class="test-avatar">PS</div><div><div class="test-name">Paul Simon</div><div class="test-role">MD, President Europe & RoW — iLUKA</div></div></div></div>
+      <div class="test-card reveal"><div class="test-text">A reliable teammate who single-handedly managed day-to-day IT operations of an entire office, demonstrating great technical knowledge, autonomy, a sense of priorities and putting customer satisfaction first.</div><div class="test-author"><div class="test-avatar">DL</div><div><div class="test-name">David LY</div><div class="test-role">IT Specialist — Same team</div></div></div></div>
+      <div class="test-card featured reveal"><div class="test-text">I strongly recommend Roland for any IT management role. He is dependable, patient, and a true pleasure to work with. His calm demeanour and problem-solving skills create a supportive environment. Roland consistently goes above and beyond. A joy to work with!</div><div class="test-author"><div class="test-avatar">KB</div><div><div class="test-name">Katherine Benjamin</div><div class="test-role">Global Account Director — iLUKA</div></div></div></div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- FOOTER -->
+<!-- ═══ CERTS ═══ -->
+<div class="page" id="page-certs">
+  <div class="panel">
+    <div class="prompt reveal"><span class="user">rdzoagbe</span>@infra:<span class="path">~/certs</span>$ <span class="cmd">ls -la</span></div>
+    <h1 class="page-title reveal"><span>Certifications</span></h1>
+    <div class="page-divider reveal"></div>
+    <div class="certs-list">
+      <div class="cert-item reveal"><div class="cert-issuer">Alison</div><div class="cert-title">Microsoft Azure Administrator — Advanced</div><div class="cert-year">2026</div></div>
+      <div class="cert-item reveal"><div class="cert-issuer">Google / Coursera</div><div class="cert-title">Cybersecurity Fundamentals</div><div class="cert-year">2024</div></div>
+      <div class="cert-item reveal"><div class="cert-issuer">Cisco</div><div class="cert-title">Introduction to Cybersecurity</div><div class="cert-year">2023</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RESUME ═══ -->
+<div class="page" id="page-resume">
+  <div class="panel">
+    <div class="prompt reveal"><span class="user">rdzoagbe</span>@infra:<span class="path">~/docs</span>$ <span class="cmd">wget cv.pdf</span></div>
+    <h1 class="page-title reveal">Download <span>CV</span></h1>
+    <div class="page-divider reveal"></div>
+    <div class="resume-block reveal">
+      <h3>Roland_Dzoagbe_CV.pdf</h3>
+      <p>Full CV covering IT Infrastructure, Cybersecurity, and Operations Management across international environments.</p>
+      <a href="Roland_Dzoagbe_CV.pdf" class="btn-terminal solid" download>⬇ Download .pdf</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTACT ═══ -->
+<div class="page" id="page-contact">
+  <div class="panel">
+    <div class="prompt reveal"><span class="user">rdzoagbe</span>@infra:<span class="path">~/contact</span>$ <span class="cmd">ping roland</span></div>
+    <h1 class="page-title reveal">Get in <span>Touch</span></h1>
+    <div class="page-divider reveal"></div>
+    <p class="reveal" style="color:var(--text-dim);font-size:.88rem;margin-bottom:2rem">Open to senior IT infrastructure, cybersecurity, and operations roles across Île-de-France.</p>
+    <div class="contact-grid">
+      <div class="contact-item reveal"><div class="ci-icon">📞</div><div><div class="ci-label">Phone</div><div class="ci-value">+33 7 82 88 46 46</div></div></div>
+      <div class="contact-item reveal"><div class="ci-icon">✉</div><div><div class="ci-label">Email</div><div class="ci-value"><a href="mailto:rolanddzoagbe@gmail.com">rolanddzoagbe@gmail.com</a></div></div></div>
+      <div class="contact-item reveal"><div class="ci-icon">🔗</div><div><div class="ci-label">LinkedIn</div><div class="ci-value"><a href="https://linkedin.com/in/r-dz" target="_blank">linkedin.com/in/r-dz</a></div></div></div>
+      <div class="contact-item reveal"><div class="ci-icon">📍</div><div><div class="ci-label">Location</div><div class="ci-value">Bondy, France</div></div></div>
+    </div>
+  </div>
+</div>
+
 <footer>
-  <p>&copy; 2026 Roland Dzoagbe. All rights reserved.</p>
+  <p>&copy; 2026 <span>Roland Dzoagbe</span> · All systems operational</p>
 </footer>
 
 <script>
-// Nav scroll effect
-const nav = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 50);
-});
-
-// Mobile menu
-const hamburger = document.getElementById('hamburger');
-const navLinks = document.getElementById('navLinks');
-hamburger.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
-});
-navLinks.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => navLinks.classList.remove('open'));
-});
-
-// Scroll reveal animation
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
+// ─── SPA ROUTER ───
+let currentPage='home';
+function navigateTo(id){
+  if(id===currentPage)return;
+  const old=document.getElementById('page-'+currentPage),nw=document.getElementById('page-'+id);
+  if(!nw)return;
+  if(old){old.classList.remove('visible');setTimeout(()=>old.classList.remove('active'),350)}
+  setTimeout(()=>{
+    nw.classList.add('active');
+    window.scrollTo({top:0,behavior:'instant'});
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{nw.classList.add('visible');triggerAnims(nw)}));
+  },old?280:0);
+  currentPage=id;
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab[data-page="'+id+'"]').forEach(t=>t.classList.add('active'));
+  document.querySelectorAll('.tab-dropdown button[data-page="'+id+'"]').forEach(b=>{
+    const grp=b.closest('.nav-tab-group');
+    if(grp)grp.querySelector('.nav-tab').classList.add('active');
   });
-}, { threshold: 0.1 });
+  document.getElementById('backHome').classList.toggle('show',id!=='home');
+  document.getElementById('navTabs').classList.remove('open');
+}
 
-document.querySelectorAll('.skill-card, .timeline-item, .cert-card, .contact-card, .detail-card').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(30px)';
-  el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-  observer.observe(el);
+function triggerAnims(page){
+  page.querySelectorAll('.reveal').forEach((el,i)=>{el.classList.remove('visible');setTimeout(()=>el.classList.add('visible'),60+i*50)});
+  page.querySelectorAll('.prof-fill').forEach((f,i)=>{f.style.width='0%';setTimeout(()=>f.style.width=f.dataset.width+'%',300+i*80)});
+  page.querySelectorAll('.tl-item').forEach((it,i)=>{it.classList.remove('visible');setTimeout(()=>it.classList.add('visible'),150+i*100)});
+  const tf=page.querySelector('.tl-fill');
+  if(tf){const tl=page.querySelector('.tl');tf.style.height='0';setTimeout(()=>{tf.style.transition='height 2s cubic-bezier(.22,1,.36,1)';tf.style.height=tl.scrollHeight+'px'},200)}
+  page.querySelectorAll('.counter').forEach(c=>{const t=+c.dataset.target,s=c.dataset.suffix||'',d=2e3,st=performance.now();c.textContent='0';function u(n){const p=Math.min((n-st)/d,1);c.textContent=Math.floor((1-Math.pow(1-p,3))*t)+s;if(p<1)requestAnimationFrame(u)}requestAnimationFrame(u)});
+}
+
+// Event delegation
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('[data-page]');
+  if(btn){e.preventDefault();navigateTo(btn.dataset.page)}
 });
-</script>
+document.getElementById('backHome').addEventListener('click',()=>navigateTo('home'));
 
+// Hamburger
+const hamburger=document.getElementById('hamburger'),navTabs=document.getElementById('navTabs');
+hamburger.addEventListener('click',()=>navTabs.classList.toggle('open'));
+
+// Mobile dropdown
+document.querySelectorAll('.nav-tab-group>.nav-tab').forEach(t=>t.addEventListener('click',e=>{
+  if(window.innerWidth<=768){e.stopPropagation();t.closest('.nav-tab-group').classList.toggle('mob-open')}
+}));
+
+// Init home counters
+setTimeout(()=>{
+  document.querySelectorAll('#page-home .counter').forEach(c=>{
+    const t=+c.dataset.target,s=c.dataset.suffix||'',d=2e3,st=performance.now();
+    function u(n){const p=Math.min((n-st)/d,1);c.textContent=Math.floor((1-Math.pow(1-p,3))*t)+s;if(p<1)requestAnimationFrame(u)}
+    requestAnimationFrame(u);
+  });
+},800);
+</script>
 </body>
 </html>
