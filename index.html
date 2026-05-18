@@ -240,6 +240,209 @@ footer{text-align:center;padding:2rem;font-size:.72rem;color:var(--text-muted);p
   .skill-grid{grid-template-columns:1fr}
   .hero-right{grid-template-columns:1fr}
 }
+
+/* =========================================================
+   PROFESSIONAL BRIGHT TECH THEME PATCH
+   Replaces the old neon/dark look with a brighter, corporate
+   technology palette while preserving the existing structure.
+   ========================================================= */
+:root{
+  --bg:#F4F8FF;
+  --bg-card:rgba(255,255,255,0.90);
+  --bg-hover:rgba(234,244,255,0.96);
+  --bg-solid:#FFFFFF;
+  --neon-blue:#2563EB;
+  --neon-purple:#0EA5E9;
+  --neon-cyan:#14B8A6;
+  --neon-pink:#38BDF8;
+  --grad:linear-gradient(135deg,#2563EB,#0EA5E9);
+  --grad-wide:linear-gradient(135deg,#1D4ED8,#0EA5E9,#14B8A6);
+  --grad-text:linear-gradient(135deg,#1E40AF,#0EA5E9,#0F766E);
+  --text:#0F172A;
+  --text-dim:#475569;
+  --text-muted:#64748B;
+  --border:rgba(15,23,42,0.10);
+  --border-neon:rgba(37,99,235,0.22);
+  --glow:rgba(37,99,235,0.14);
+}
+
+body{
+  background:
+    radial-gradient(ellipse at 18% 8%,rgba(37,99,235,0.12) 0%,transparent 45%),
+    radial-gradient(ellipse at 78% 20%,rgba(14,165,233,0.12) 0%,transparent 42%),
+    linear-gradient(180deg,#FFFFFF 0%,#F4F8FF 52%,#EEF6FF 100%);
+  color:var(--text);
+}
+
+::selection{background:#BFDBFE;color:#0F172A}
+a{color:#2563EB}
+a:hover{color:#0F766E}
+
+.grid-bg{
+  background-image:
+    linear-gradient(rgba(37,99,235,0.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(37,99,235,0.045) 1px,transparent 1px);
+}
+.grid-bg::after{
+  background:
+    radial-gradient(ellipse at 25% 15%,rgba(37,99,235,0.12) 0%,transparent 52%),
+    radial-gradient(ellipse at 75% 70%,rgba(20,184,166,0.10) 0%,transparent 50%);
+}
+
+nav{
+  background:rgba(255,255,255,0.86);
+  border:1px solid rgba(37,99,235,0.16);
+  box-shadow:0 18px 60px rgba(15,23,42,0.10);
+}
+.nb{color:#64748B}
+.nb:hover{color:#0F172A;background:rgba(219,234,254,0.55)}
+.nb.active{background:#DBEAFE;color:#1D4ED8}
+.nb.cta{background:var(--grad);color:white;box-shadow:0 10px 28px rgba(37,99,235,0.22)}
+.ng .nd{
+  background:rgba(255,255,255,0.97);
+  border:1px solid rgba(37,99,235,0.14);
+  box-shadow:0 22px 50px rgba(15,23,42,0.16);
+}
+.nd button{color:#475569}
+.nd button:hover{color:#1D4ED8;background:#EFF6FF}
+
+.hb-btn span{background:#0F172A}
+.page{background:transparent}
+.panel{max-width:1060px}
+.n-tag,.tl-date,.about-card-label,.cert-issuer,.pb-pc{
+  background:var(--grad-text);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.n-line{background:var(--grad);box-shadow:0 6px 20px rgba(37,99,235,0.18)}
+
+.neon-card{
+  background:rgba(255,255,255,0.86);
+  border:1px solid rgba(15,23,42,0.10);
+  box-shadow:0 18px 60px rgba(15,23,42,0.07);
+}
+.neon-card:hover{
+  border-color:rgba(37,99,235,0.28);
+  box-shadow:0 24px 75px rgba(37,99,235,0.16);
+  transform:translateY(-2px);
+}
+
+.back-n{
+  background:rgba(255,255,255,0.88);
+  border:1px solid rgba(37,99,235,0.20);
+  color:#1D4ED8;
+  box-shadow:0 18px 50px rgba(15,23,42,0.10);
+}
+.back-n:hover{background:#EFF6FF}
+
+.hero-photo{
+  background:#FFFFFF;
+  border:2px solid rgba(37,99,235,0.18);
+  box-shadow:0 20px 55px rgba(37,99,235,0.16);
+}
+.hero-photo .placeholder{
+  background:linear-gradient(135deg,rgba(37,99,235,0.10),rgba(20,184,166,0.10));
+  color:#1D4ED8;
+}
+.hero-photo::after{background:var(--grad);opacity:.18;filter:blur(10px)}
+.hero-badge{
+  background:#EAF5FF;
+  border:1px solid rgba(37,99,235,0.18);
+  color:#1D4ED8;
+}
+.hero-badge .dot{background:#14B8A6}
+@keyframes glow-dot{0%,100%{box-shadow:0 0 0 0 rgba(20,184,166,.32)}50%{box-shadow:0 0 0 5px rgba(20,184,166,0)}}
+
+.hero-name .grad,.n-title .glow,.kpi-num{
+  background:var(--grad-text);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-summary{color:#475569}
+.hero-summary strong{color:#0F172A}
+.btn-n.grd{background:var(--grad);box-shadow:0 12px 30px rgba(37,99,235,0.24)}
+.btn-n.grd:hover{box-shadow:0 18px 45px rgba(37,99,235,0.30)}
+.btn-n.out{background:white;color:#0F172A;border:1px solid rgba(15,23,42,0.12)}
+.btn-n.out:hover{border-color:#2563EB;color:#1D4ED8;background:#EFF6FF}
+
+.social-link{
+  background:white;
+  border:1px solid rgba(15,23,42,0.10);
+  color:#475569;
+}
+.social-link:hover{border-color:#2563EB;color:#1D4ED8;background:#EFF6FF}
+
+.kpi-card{
+  background:rgba(255,255,255,0.90);
+  border:1px solid rgba(15,23,42,0.10);
+  box-shadow:0 16px 50px rgba(15,23,42,0.06);
+}
+.kpi-card::before{background:var(--grad);opacity:.85}
+.kpi-label{color:#0F172A}
+.kpi-context{color:#64748B}
+
+.trust-bar{border-top:1px solid rgba(15,23,42,0.10)}
+.trust-label{color:#64748B}
+.trust-logo{
+  background:rgba(255,255,255,0.74);
+  border:1px solid rgba(15,23,42,0.10);
+  color:#475569;
+}
+.trust-logo:hover{border-color:#2563EB;color:#0F172A;background:#EFF6FF}
+.trust-logo .highlight{color:#0EA5E9}
+
+.about-text p,.tl-desc,.test-quote,.resume-block p{color:#475569}
+.about-text strong{color:#0F172A}
+.about-card-value,.skill-block h3,.tl-role,.cert-name,.resume-block h3,.cc-val{color:#0F172A}
+
+.pill{
+  color:#475569;
+  background:#F8FAFC;
+  border:1px solid rgba(15,23,42,0.10);
+}
+.pill:hover{color:#1D4ED8;border-color:#2563EB;box-shadow:0 8px 20px rgba(37,99,235,0.10);background:#EFF6FF}
+
+.pb-track{background:#E2E8F0}
+.pb-fill{background:var(--grad-wide);box-shadow:0 4px 14px rgba(37,99,235,0.20)}
+
+.tl-line{background:#CBD5E1}
+.tl-fill{background:var(--grad)}
+.tl-item::before{background:#F8FAFC;border-color:#CBD5E1}
+.tl-item.visible::before{border-color:#2563EB;background:#2563EB;box-shadow:0 0 0 6px rgba(37,99,235,0.12)}
+.tl-company{color:#475569}
+.tl-company-tag{
+  background:#EFF6FF;
+  border:1px solid rgba(37,99,235,0.16);
+  color:#1D4ED8;
+}
+.tl-scope{color:#64748B}
+.tl-kpi{
+  background:#ECFDF5;
+  border:1px solid rgba(20,184,166,0.20);
+  color:#0F766E;
+}
+
+.test-card.featured{border-color:rgba(37,99,235,0.24)}
+.test-card.featured::before{background:var(--grad)}
+.test-author .test-avatar,.test-avatar{background:var(--grad)}
+.test-role{color:#64748B}
+.test-context{color:#1D4ED8}
+
+.contact-card{
+  background:rgba(255,255,255,0.90);
+  border:1px solid rgba(15,23,42,0.10);
+}
+.cc-label{color:#64748B}
+
+footer{color:#64748B}
+
+/* Improve readability on bright theme */
+.skill-block,.about-card,.test-card,.cert-card,.resume-block,.contact-card{
+  background:rgba(255,255,255,0.88);
+}
+
 </style>
 </head>
 <body>
